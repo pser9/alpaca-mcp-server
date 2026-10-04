@@ -1,22 +1,12 @@
-FROM python:3.11-slim
-
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+FROM ghcr.io/astral-sh/uv:python3.11-alpine
 
 WORKDIR /app
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project
+# Install the Alpaca MCP server directly from the package registry
+RUN uv pip install --system alpaca-mcp-server
 
-COPY pyproject.toml uv.lock README.md ./
-COPY src/ ./src/
-COPY .github/core/ ./.github/core/
+# Expose Render's default port 
+EXPOSE 10000
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen
-
-ENV PATH="/app/.venv/bin:$PATH"
-
-# Use the local stdio transport unless the operator explicitly configures secured HTTP.
-CMD ["alpaca-mcp-server"]
+# Run using the required web transport layer for Render
+CMD ["alpaca-mcp-server", "serve", "--transport", "streamable-http", "--host", "0.0.0.0", "--port", "10000"]
