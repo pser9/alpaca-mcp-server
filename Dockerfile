@@ -10,4 +10,5 @@ EXPOSE 10000
 
 # Run using the required web transport layer for Render.
 # Using shell form allows Render to dynamically inject the $PORT variable.
-CMD alpaca-mcp-server serve --transport sse --host 0.0.0.0 --port $PORT
+# CMD alpaca-mcp-server serve --transport sse --host 0.0.0.0 --port $PORT
+CMD STARLETTE_ALLOWED_HOSTS="*" alpaca-mcp-server serve --transport sse --host 0.0.0.0 --port $PORT
