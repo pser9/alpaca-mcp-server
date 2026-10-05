@@ -9,4 +9,4 @@ RUN uv pip install --system alpaca-mcp-server
 EXPOSE 10000
 
 # Run using the required web transport layer for Render
-CMD ["alpaca-mcp-server", "serve", "--transport", "streamable-http", "--host", "0.0.0.0", "--port", "10000"]
+CMD alpaca-mcp-server, serve, --transport, streamable-http, --host, 0.0.0.0, --port, 10000
